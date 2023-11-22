@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smoothie Order Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        input[type="submit"] {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #smoothie-description {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #bill {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>Smoothie Order Form</h1>
+    <form action="/submit-order" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="smoothie-type">Smoothie Type:</label>
+        <select id="smoothie-type" name="smoothie-type" required>
+            <option value="">Select a smoothie type</option>
+            <option value="strawberry-banana">Strawberry Banana</option>
+            <option value="mango-pineapple">Mango Pineapple</option>
+            <option value="blueberry-spinach">Blueberry Spinach</option>
+        </select>
+
+        <label for="size">Size:</label>
+        <input type="radio" id="small" name="size" value="small" required>
+        <label for="small">Small</label>
+        <input type="radio" id="medium" name="size" value="medium">
+        <label for="medium">Medium</label>
+        <input type="radio" id="large" name="size" value="large">
+        <label for="large">Large</label>
+
+        <label for="toppings">Toppings:</label>
+        <input type="checkbox" id="honey" name="toppings" value="honey">
+        <label for="honey">Honey</label>
+        <input type="checkbox" id="chocolate-chips" name="toppings" value="chocolate-chips">
+        <label for="chocolate-chips">Chocolate Chips</label>
+        <input type="checkbox" id="granola" name="toppings" value="granola">
+        <label for="granola">Granola</label>
+
+        <input type="submit" value="Place Order">
+    </form>
+
+    <div id="smoothie-description"></div>
+
+    <div id="bill"></div>
+
+    <script>
+        var form = document.querySelector('form');
+        var submitButton = document.querySelector('input[type="submit"]');
+        var smoothieDescription = document.getElementById('smoothie-description');
+        var bill = document.getElementById('bill');
+
+        // Smoothie ingredient prices
+        var ingredientPrices = {
+            'strawberry-banana': 2.99,
+            'mango-pineapple': 3.49,
+            'blueberry-spinach': 3.99,
+            'honey': 0.5,
+            'chocolate-chips': 0.75,
+            'granola': 1.0
+        };
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var name = document.getElementById('name').value;
+            var email = document.getElementById('email').value;
+            var smoothieType = document.getElementById('smoothie-type').value;
+            var size = document.querySelector('input[name="size"]:checked').value;
+            var toppings = [];
+            var checkboxes = document.querySelectorAll('input[name="toppings"]:checked');
+            checkboxes.forEach(function(checkbox) {
+                toppings.push(checkbox.value);
+            });
+
+            // Calculate total price
+            var totalPrice = ingredientPrices[smoothieType] || 0;
+            toppings.forEach(function(topping) {
+                totalPrice += ingredientPrices[topping] || 0;
+            });
+
+            // Do something with the captured form values
+            console.log('Name:', name);
+            console.log('Email:', email);
+            console.log('Smoothie Type:', smoothieType);
+            console.log('Size:', size);
+            console.log('Toppings:', toppings);
+            console.log('Total Price:', totalPrice);
+
+            // Create smoothie description
+            var description = 'Smoothie Description:<br>';
+            description += 'Name: ' + name + '<br>';
+            description += 'Email: ' + email + '<br>';
+            description += 'Smoothie Type: ' + smoothieType + '<br>';
+            description += 'Size: ' + size + '<br>';
+            description += 'Toppings: ' + toppings.join(', ') + '<br>';
+
+            // Display smoothie description on the HTML page
+            smoothieDescription.innerHTML = description;
+
+            // Create bill
+            var billContent = 'Bill:<br>';
+            billContent += 'Smoothie Type: ' + smoothieType + '<br>';
+            billContent += 'Size: ' + size + '<br>';
+            billContent += 'Toppings: ' + toppings.join(', ') + '<br>';
+            billContent += 'Total Price: $' + totalPrice.toFixed(2) + '<br>';
+
+            // Display bill on the HTML page
+            bill.innerHTML = billContent;
+
+            class Smoothie {
+                constructor(name, email, smoothieType, size, toppings) {
+                    this.name = name;
+                    this.email = email;
+                    this.smoothieType = smoothieType;
+                    this.size = size;
+                    this.toppings = toppings;
+                }
+
+                // Add any additional methods or functionality here
+            }
+        });
+    </script>
+</body>
+</html>
