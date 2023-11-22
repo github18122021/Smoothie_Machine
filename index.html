@@ -69,9 +69,24 @@
         #bill {
             margin-top: 20px;
             padding: 20px;
-            background-color: #fff;
+            background-color: #f2f2f2;
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .bill-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .bill-item span {
+            font-weight: bold;
+        }
+
+        .bill-total {
+            margin-top: 10px;
+            text-align: right;
         }
     </style>
 </head>
@@ -170,11 +185,12 @@
             smoothieDescription.innerHTML = description;
 
             // Create bill
-            var billContent = 'Bill:<br>';
-            billContent += 'Smoothie Type: ' + smoothieType + '<br>';
-            billContent += 'Size: ' + size + '<br>';
-            billContent += 'Toppings: ' + toppings.join(', ') + '<br>';
-            billContent += 'Total Price: $' + totalPrice.toFixed(2) + '<br>';
+            var billContent = '<h2>Bill</h2>';
+            billContent += '<div class="bill-item"><span>Smoothie Type:</span> ' + smoothieType + '</div>';
+            billContent += '<div class="bill-item"><span>Size:</span> ' + size + '</div>';
+            billContent += '<div class="bill-item"><span>Toppings:</span> ' + toppings.join(', ') + '</div>';
+            billContent += '<div class="bill-item"><span>Total Price:</span> $' + totalPrice.toFixed(2) + '</div>';
+            billContent += '<div class="bill-total"><span>Thank you for your order!</span></div>';
 
             // Display bill on the HTML page
             bill.innerHTML = billContent;
